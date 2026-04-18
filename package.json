@@ -9,7 +9,7 @@
     "db:backup": "node scripts/backup-db.mjs",
     "db:restore": "node scripts/restore-db.mjs",
     "build": "tsc -p tsconfig.json",
-    "start": "pnpm build && node dist/index.js",
+    "start": "npm run build && node dist/index.js",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
@@ -34,10 +34,5 @@
     "@types/nodemailer": "^8.0.0",
     "tsx": "^4.21.0",
     "typescript": "5.9.3"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "better-sqlite3"
-    ]
   }
 }
