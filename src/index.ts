@@ -56,10 +56,17 @@ const PORT = env.PORT;
 const FRONTEND_ORIGINS = (env.FRONTEND_ORIGIN || "http://localhost:5173")
   .split(",")
   .map((origin) => origin.trim());
-const ADMIN_EMAIL = env.ADMIN_EMAIL;
-const JWT_SECRET = env.JWT_SECRET;
+const ADMIN_EMAIL = env.ADMIN_EMAIL || "";
+const JWT_SECRET = env.JWT_SECRET || randomUUID();
 const ADMIN_SESSION_TTL =
   (env.ADMIN_SESSION_TTL as SignOptions["expiresIn"] | undefined) || "12h";
+
+// Warn if admin auth is not configured
+if (!env.ADMIN_EMAIL || !env.ADMIN_PASSWORD || !env.JWT_SECRET) {
+  logger.warn(
+    "⚠️  Admin authentication not fully configured. Public API is available, but admin login will be unavailable until ADMIN_EMAIL, ADMIN_PASSWORD, and JWT_SECRET are properly configured."
+  );
+}
 
 const RESERVED_PATHS = new Set([
   "/",

@@ -37,11 +37,13 @@ const envSchema = z.object({
     }, "FRONTEND_ORIGIN must be a comma-separated list of valid origins"),
   PUBLIC_API_URL: z.string().url().default("http://localhost:4000/api"),
   SQLITE_PATH: z.string().default("./data/raytrace.db"),
-  ADMIN_EMAIL: z.string().email(),
-  ADMIN_PASSWORD: z.string().min(6, "Password must be at least 6 characters"),
+  ADMIN_EMAIL: z.string().email().optional().or(z.literal("")),
+  ADMIN_PASSWORD: z.string().min(6, "Password must be at least 6 characters").optional().or(z.literal("")),
   JWT_SECRET: z
     .string()
-    .min(32, "JWT_SECRET must be at least 32 characters for security"),
+    .min(32, "JWT_SECRET must be at least 32 characters for security")
+    .optional()
+    .or(z.literal("")),
   ADMIN_SESSION_TTL: z.string().default("12h"),
   GMAIL_USER: z.string().email().optional().or(z.literal("")),
   GMAIL_APP_PASSWORD: z.string().optional().or(z.literal("")),
