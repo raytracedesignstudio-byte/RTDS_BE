@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
-    "better-sqlite3": "^11.8.1",
+    "better-sqlite3": "11.10.0",
     "cloudinary": "^2.6.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -34,5 +34,10 @@
     "@types/nodemailer": "^8.0.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3"
+    ]
   }
 }
