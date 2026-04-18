@@ -38,7 +38,11 @@ const envSchema = z.object({
   PUBLIC_API_URL: z.string().url().default("http://localhost:4000/api"),
   SQLITE_PATH: z.string().default("./data/raytrace.db"),
   ADMIN_EMAIL: z.string().email().optional().or(z.literal("")),
-  ADMIN_PASSWORD: z.string().min(6, "Password must be at least 6 characters").optional().or(z.literal("")),
+  ADMIN_PASSWORD: z
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .optional()
+    .or(z.literal("")),
   JWT_SECRET: z
     .string()
     .min(32, "JWT_SECRET must be at least 32 characters for security")

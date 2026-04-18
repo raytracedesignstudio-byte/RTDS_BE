@@ -9,7 +9,7 @@
     "db:backup": "node scripts/backup-db.mjs",
     "db:restore": "node scripts/restore-db.mjs",
     "build": "tsc -p tsconfig.json",
-    "start": "node index.js",
+    "start": "node dist/index.js",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
