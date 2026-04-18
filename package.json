@@ -13,6 +13,13 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "2.1.0",
+    "@types/node": "^25.6.0",
+    "@types/nodemailer": "^8.0.0",
     "bcryptjs": "^3.0.3",
     "better-sqlite3": "^12.9.0",
     "cloudinary": "2.9.0",
@@ -22,19 +29,11 @@
     "jsonwebtoken": "^9.0.3",
     "multer": "2.1.1",
     "nodemailer": "^8.0.5",
+    "ts-node": "10.9.2",
+    "typescript": "^6.0.3",
     "zod": "^4.3.6"
   },
-  "devDependencies": {
-    "@types/better-sqlite3": "^7.6.12",
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.6",
-    "@types/jsonwebtoken": "^9.0.10",
-    "@types/multer": "2.1.0",
-    "@types/node": "^25.6.0",
-    "@types/nodemailer": "^8.0.0",
-    "ts-node": "10.9.2",
-    "typescript": "^6.0.3"
-  },
+  "devDependencies": {},
   "pnpm": {
     "onlyBuiltDependencies": [
       "better-sqlite3"
