@@ -5,13 +5,7 @@ import bcryptjs from "bcryptjs";
 import { DbState, type SiteProfile } from "./types.js";
 import { logger } from "./logger-new.js";
 
-const sqlitePath =
-  process.env.SQLITE_PATH ||
-  path.join(
-    "/home/u822601178/domains/darkorchid-ferret-552140.hostingersite.com/nodejs",
-    "data",
-    "raytrace.db",
-  );
+const sqlitePath = process.env.SQLITE_PATH || "./data/raytrace.db";
 const resolvedDbPath = path.resolve(process.cwd(), sqlitePath);
 const dbDir = path.dirname(resolvedDbPath);
 
