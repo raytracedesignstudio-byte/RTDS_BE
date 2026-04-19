@@ -2,8 +2,8 @@ import fs from "node:fs";
 import path from "node:path";
 import Database from "better-sqlite3";
 import bcryptjs from "bcryptjs";
-import { DbState, type SiteProfile } from "./types.js";
-import { logger } from "./logger-new.js";
+import { DbState, type SiteProfile } from "./types";
+import { logger } from "./logger-new";
 
 const sqlitePath = process.env.SQLITE_PATH || "./data/raytrace.db";
 const resolvedDbPath = path.resolve(process.cwd(), sqlitePath);

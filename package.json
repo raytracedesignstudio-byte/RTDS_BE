@@ -2,7 +2,6 @@
   "name": "raytrace-be",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "node --watch --loader ts-node/esm src/index.ts",
     "db:init": "node --loader ts-node/esm src/scripts/init-db.ts",

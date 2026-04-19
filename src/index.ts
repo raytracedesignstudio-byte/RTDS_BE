@@ -10,7 +10,7 @@ import jwt, { JwtPayload, SignOptions } from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 import nodemailer from "nodemailer";
 
-import { createCloudinaryUploadConfig } from "./lib/cloudinary.js";
+import { createCloudinaryUploadConfig } from "./lib/cloudinary";
 import {
   db,
   initDatabase,
@@ -18,9 +18,9 @@ import {
   nextId,
   readDb,
   writeDb,
-} from "./lib/store.js";
-import { env } from "./lib/env.js";
-import { logger } from "./lib/logger-new.js";
+} from "./lib/store";
+import { env } from "./lib/env";
+import { logger } from "./lib/logger-new";
 import {
   addProjectImageSchema,
   applySchema,
@@ -37,7 +37,7 @@ import {
   updateVerticalCoversSchema,
   updateVerticalSchema,
   validateRequest,
-} from "./lib/validation.js";
+} from "./lib/validation";
 
 // ==============================
 // APP SETUP
