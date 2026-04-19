@@ -1004,13 +1004,12 @@ async function start() {
     console.log("✅ Database initialized");
 
     // Use process.env.PORT first (Hostinger injects this at runtime)
-    const PORT: number = process.env.PORT
-      ? Number(process.env.PORT)
-      : Number(env.PORT) || 4000;
+    const port = Number(process.env.PORT) || 3000;
 
-    const server = app.listen(PORT, "0.0.0.0", () => {
-      console.log(`✅ Server running on port ${PORT}`);
-    });
+  const server = app.listen(port, "0.0.0.0", () => {
+ console.log(`Server running on ${port}`);
+});
+
 
     const shutdown = (signal: string) => {
       console.log(`⚠️ ${signal} received, shutting down...`);
