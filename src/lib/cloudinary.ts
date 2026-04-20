@@ -2,9 +2,7 @@ import crypto from "node:crypto";
 
 function requiredEnv(name: string): string {
   const value = process.env[name];
-  if (!value) {
-    throw new Error(`${name} must be set`);
-  }
+  if (!value) throw new Error(`${name} must be set`);
   return value;
 }
 
@@ -13,11 +11,15 @@ export function createCloudinaryUploadConfig() {
   const apiKey = requiredEnv("CLOUDINARY_API_KEY");
   const apiSecret = requiredEnv("CLOUDINARY_API_SECRET");
   const folder = process.env.CLOUDINARY_FOLDER || "raytrace";
+
   const timestamp = Math.floor(Date.now() / 1000).toString();
 
+  // Parameters must be sorted alphabetically
+  const paramsToSign = `folder=${folder}&timestamp=${timestamp}`;
+
   const signature = crypto
-    .createHash("sha1")
-    .update(`folder=${folder}&timestamp=${timestamp}${apiSecret}`)
+    .createHash("sha256")
+    .update(paramsToSign + apiSecret)
     .digest("hex");
 
   return {
