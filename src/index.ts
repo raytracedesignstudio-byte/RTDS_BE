@@ -630,10 +630,20 @@ app.post("/api/admin/projects", requireAdmin, async (req, res) => {
     return;
   }
 
+  // Auto-uniquify the slug so a collision creates e.g. "villa-2" instead of
+  // failing the UNIQUE(projects.slug) constraint and returning a 500.
+  const existingSlugs = new Set(data.projects.map((p) => p.slug));
+  let projectSlug = String(slug);
+  if (existingSlugs.has(projectSlug)) {
+    let suffix = 2;
+    while (existingSlugs.has(`${projectSlug}-${suffix}`)) suffix++;
+    projectSlug = `${projectSlug}-${suffix}`;
+  }
+
   const now = new Date().toISOString();
   const project = {
     id: nextId(data.projects),
-    slug: String(slug),
+    slug: projectSlug,
     title: String(title),
     location: String(location),
     category: String(category),
