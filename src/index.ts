@@ -29,6 +29,7 @@ import {
   createVacancySchema,
   createVerticalSchema,
   loginSchema,
+  updatePartnersSchema,
   updateFeaturedProjectsSchema,
   updateProjectSchema,
   updateSiteProfileSchema,
@@ -746,6 +747,10 @@ app.get("/api/site-settings/public", async (_req, res) => {
       data.teamMembers.length > 0
         ? data.teamMembers.sort((a, b) => a.sortOrder - b.sortOrder)
         : null,
+    partners:
+      data.partners.length > 0
+        ? data.partners.sort((a, b) => a.sortOrder - b.sortOrder)
+        : null,
     verticalCovers:
       data.verticalCovers.length > 0
         ? Object.fromEntries(data.verticalCovers.map((c) => [c.verticalId, c.image]))
@@ -812,6 +817,27 @@ app.put("/api/admin/team-members", requireAdmin, async (req, res) => {
   }));
   await writeDb(data);
   res.json(data.teamMembers);
+});
+
+app.get("/api/admin/partners", requireAdmin, async (_req, res) => {
+  const data = await readDb();
+  res.json(data.partners.sort((a, b) => a.sortOrder - b.sortOrder));
+});
+
+app.put("/api/admin/partners", requireAdmin, async (req, res) => {
+  const body = parseBody(updatePartnersSchema, req.body, res);
+  if (!body) return;
+  const { partners } = body as any;
+
+  const data = await readDb();
+  data.partners = partners.map((partner: any, index: number) => ({
+    id: index + 1,
+    name: String(partner.name),
+    logo: partner.logo ? String(partner.logo) : "",
+    sortOrder: index,
+  }));
+  await writeDb(data);
+  res.json(data.partners);
 });
 
 app.get("/api/admin/vertical-covers", requireAdmin, async (_req, res) => {

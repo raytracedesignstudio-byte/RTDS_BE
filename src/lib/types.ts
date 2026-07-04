@@ -42,6 +42,13 @@ export type TeamMember = {
   sortOrder: number;
 };
 
+export type Partner = {
+  id: number;
+  name: string;
+  logo: string;
+  sortOrder: number;
+};
+
 export type VerticalCover = {
   id: number;
   verticalId: string;
@@ -105,6 +112,7 @@ export type DbState = {
   vacancies: Vacancy[];
   admins: Admin[];
   teamMembers: TeamMember[];
+  partners: Partner[];
   verticals: Vertical[];
   verticalServices: VerticalService[];
   verticalCovers: VerticalCover[];

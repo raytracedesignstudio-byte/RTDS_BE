@@ -96,6 +96,19 @@ export const updateTeamMembersSchema = z.object({
   ),
 });
 
+export const updatePartnersSchema = z.object({
+  partners: z.array(
+    z.object({
+      name: z.string().min(1, "Partner name is required"),
+      logo: z
+        .string()
+        .url("Partner logo must be a valid URL")
+        .optional()
+        .or(z.literal("")),
+    }),
+  ),
+});
+
 export const updateVerticalCoversSchema = z.object({
   covers: z.array(
     z.object({

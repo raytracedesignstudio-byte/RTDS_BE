@@ -21,6 +21,7 @@ type ProjectImageRow = DbState["projectImages"][number];
 type VacancyRow = DbState["vacancies"][number];
 type AdminRow = DbState["admins"][number];
 type TeamMemberRow = DbState["teamMembers"][number];
+type PartnerRow = DbState["partners"][number];
 type VerticalRow = DbState["verticals"][number];
 type VerticalServiceRow = DbState["verticalServices"][number];
 type VerticalCoverRow = DbState["verticalCovers"][number];
@@ -292,6 +293,7 @@ function defaultState(): DbState {
         sortOrder: 3,
       },
     ],
+    partners: [],
     verticals: [
       {
         id: 1,
@@ -494,6 +496,15 @@ function toTeamMember(row: any): TeamMemberRow {
   };
 }
 
+function toPartner(row: any): PartnerRow {
+  return {
+    id: row.id,
+    name: row.name,
+    logo: row.logo,
+    sortOrder: row.sort_order,
+  };
+}
+
 function toVertical(row: any): VerticalRow {
   return {
     id: row.id,
@@ -608,6 +619,13 @@ export async function initDatabase(): Promise<void> {
       sort_order INTEGER NOT NULL DEFAULT 0 CHECK (sort_order >= 0)
     );
 
+    CREATE TABLE IF NOT EXISTS partners (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      logo TEXT NOT NULL DEFAULT '',
+      sort_order INTEGER NOT NULL DEFAULT 0 CHECK (sort_order >= 0)
+    );
+
     CREATE TABLE IF NOT EXISTS verticals (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       slug TEXT NOT NULL UNIQUE,
@@ -663,6 +681,7 @@ export async function initDatabase(): Promise<void> {
     CREATE INDEX IF NOT EXISTS idx_vacancies_active_created ON vacancies(active, created_at);
     CREATE INDEX IF NOT EXISTS idx_admins_email_active ON admins(email, is_active);
     CREATE INDEX IF NOT EXISTS idx_team_members_sort ON team_members(sort_order);
+    CREATE INDEX IF NOT EXISTS idx_partners_sort ON partners(sort_order);
     CREATE INDEX IF NOT EXISTS idx_verticals_active_sort ON verticals(active, sort_order);
     CREATE INDEX IF NOT EXISTS idx_vertical_services_vertical_sort ON vertical_services(vertical_id, sort_order);
     CREATE INDEX IF NOT EXISTS idx_featured_projects_sort ON featured_projects(sort_order);
@@ -822,6 +841,9 @@ export async function readDb(): Promise<DbState> {
     const teamRes = db
       .prepare("SELECT * FROM team_members ORDER BY sort_order, id")
       .all();
+    const partnersRes = db
+      .prepare("SELECT * FROM partners ORDER BY sort_order, id")
+      .all();
     const verticalsRes = db
       .prepare("SELECT * FROM verticals ORDER BY sort_order, id")
       .all();
@@ -855,6 +877,7 @@ export async function readDb(): Promise<DbState> {
       vacancies: vacanciesRes.map(toVacancy),
       admins: adminsRes.map(toAdmin),
       teamMembers: teamRes.map(toTeamMember),
+      partners: partnersRes.map(toPartner),
       verticals: verticalsRes.map(toVertical),
       verticalServices: verticalServicesRes.map(toVerticalService),
       verticalCovers: coversRes.map(toVerticalCover),
@@ -931,6 +954,14 @@ export async function writeDb(next: DbState): Promise<void> {
          name=excluded.name,
          role=excluded.role,
          image=excluded.image,
+         sort_order=excluded.sort_order`,
+    );
+    const upsertPartner = db.prepare(
+      `INSERT INTO partners (id, name, logo, sort_order)
+       VALUES (?, ?, ?, ?)
+       ON CONFLICT(id) DO UPDATE SET
+         name=excluded.name,
+         logo=excluded.logo,
          sort_order=excluded.sort_order`,
     );
     const upsertVertical = db.prepare(
@@ -1092,6 +1123,19 @@ export async function writeDb(next: DbState): Promise<void> {
       pruneByIds(
         "team_members",
         next.teamMembers.map((member) => member.id),
+      );
+
+      for (const partner of next.partners) {
+        upsertPartner.run(
+          partner.id,
+          partner.name,
+          partner.logo,
+          partner.sortOrder,
+        );
+      }
+      pruneByIds(
+        "partners",
+        next.partners.map((partner) => partner.id),
       );
 
       for (const vertical of next.verticals) {
